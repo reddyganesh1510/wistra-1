@@ -1,0 +1,23 @@
+{
+  "name": "wistra-backend",
+  "version": "1.0.0",
+  "description": "A backend service for audio transcription and chat response generation.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@elevenlabs/elevenlabs-js": "^2.9.0",
+    "axios": "^0.21.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "elevenlabs-js": "^1.2.6",
+    "express": "^4.17.1",
+    "fs-extra": "^10.0.0",
+    "multer": "^1.4.2",
+    "openai": "^5.12.2"
+  },
+  "author": "",
+  "license": "ISC"
+}
