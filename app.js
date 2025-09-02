@@ -1,20 +1,33 @@
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
-globalThis.File = require("node:buffer").File;
-const audioRoutes = require("./routes/audioRoutes");
-const chatRoutes = require("./routes/chatRoutes");
-const historyRoutes = require("./routes/historyRoutes");
+const restify = require("restify");
+const botbuilder = require("botbuilder");
 
-const app = express();
-const PORT = process.env.PORT || 8000;
+// Create bot adapter, which defines how the bot sends and receives messages.
+var adapter = new botbuilder.BotFrameworkAdapter({
+  appId: process.env.MicrosoftAppId,
+  appPassword: process.env.MicrosoftAppPassword,
+});
 
-app.use(cors());
-app.use(express.json());
-app.use("/api/audio", audioRoutes);
-app.use("/api/chat", chatRoutes);
-app.use("/api/history", historyRoutes);
+// Create HTTP server.
+let server = restify.createServer();
+server.listen(process.env.port || process.env.PORT || 8080, function () {
+  console.log(`\n${server.name} listening to ${server.url}`);
+  console.log(
+    `\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`
+  );
+});
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Listen for incoming requests at /api/messages.
+server.post("/api/messages", (req, res, next) => {
+  // Use the adapter to process the incoming web request into a TurnContext object.
+  adapter.processActivity(req, res, async (turnContext) => {
+    // Do something with this incoming activity!
+    if (turnContext.activity.type === "message") {
+      // Get the user's text
+      const utterance = turnContext.activity.text;
+
+      // send a reply
+      await turnContext.sendActivity(`I heard you say ${utterance}`);
+    }
+    next();
+  });
 });
